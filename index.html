@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>uberscore.lua</h1>
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>UberScore</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>UberScore</code></h1>
+<p>uberscore.lua</p>
+<p> A Score Display system for Corona SDK</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: DevilSquid, René Aye &ndash; 2016</li>
+        <li><strong>License</strong>: MIT</li>
+        <li><strong>Author</strong>: René Aye</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new">new (options)</a></td>
+	<td class="summary">Constructor function of UberScore module</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uberScore:Add">uberScore:Add (value, step, freq)</a></td>
+	<td class="summary">Add a value to the score counter</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uberScore:CreateAction">uberScore:CreateAction (options)</a></td>
+	<td class="summary">Add actions that get fired when
+ a certain values gets added or is reached</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uberScore:Delete">uberScore:Delete ()</a></td>
+	<td class="summary">Deletes the score counter</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uberScore:GetWidth">uberScore:GetWidth ()</a></td>
+	<td class="summary">Get the width of the whole score display</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uberScore:PointsInBuffer">uberScore:PointsInBuffer ()</a></td>
+	<td class="summary">How many score points are in the buffer</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uberScore:SetColor">uberScore:SetColor (r, g, b)</a></td>
+	<td class="summary">Sets the tint color of the bitmap font</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new (options)</strong>
+    </dt>
+    <dd>
+    Constructor function of UberScore module
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">options</span>
+        <p> a table with options for the score counter curve</p>
+
+<ul>
+<li><code>x</code>:                  (<strong>number</strong>) the x position of the score counter (<em>default</em> 0)</li>
+<li><code>y</code>:                  (<strong>number</strong>) the y position of the score counter (<em>default</em> 0)</li>
+<li><code>score</code>:              (<strong>number</strong>) the initial score value (<em>default</em> 0)</li>
+<li><code>maxDigits</code>:          (<strong>number</strong>) how many digits the score counter does have (<em>default</em> 6)</li>
+<li><code>leadingZeros</code>:       (<strong>number</strong>) how many leading zeros the score counter does have (<em>default</em> 6)</li>
+<li><code>fontName</code>:           (<strong>string</strong>) the name of the bitmap font</li>
+<li><code>fontSize</code>:           (<strong>number</strong>) the size of the bitmap font (<em>default</em> 64)</li>
+<li><code>tracking</code>:           (<strong>number</strong>) the distance between single digits (<em>default</em> 32)</li>
+<li><code>animation</code>:          (<strong>number</strong>) the animation type (0=off,1 or 2) (<em>default</em> 0)</li>
+<li><code>animationSpeed</code>:     (<strong>number</strong>) the transition speed of the animation in millisecs (<em>default</em> 250)</li>
+<li><code>transitionIn</code>:       (<strong>transition</strong>) custom easing transitions when a new digit comes in (<em>default</em> easing.linear)</li>
+<li><code>transitionOut</code>:      (<strong>transition</strong>) custom easing transitions when a new digit goes out (<em>default</em> easing.linear)</li>
+<li><code>updateFrequency</code>:    (<strong>number</strong>) the frequency of the score counter updates (<em>default</em> 100)</li>
+<li><code>instantChange</code>:      (<strong>bool</strong>) if the whole score buffer should be instantly added to the counter on next update (<em>default</em> false)</li>
+</ul>
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+  <span class="keyword">local</span> UberScore = <span class="global">require</span>(<span class="string">"devilsquid.uberscore.uberscore"</span>)
+ 	<span class="keyword">local</span> score = UberScore:new()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "uberScore:Add"></a>
+    <strong>uberScore:Add (value, step, freq)</strong>
+    </dt>
+    <dd>
+    Add a value to the score counter
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">number</span></span>
+         the value to add to the score counter
+        </li>
+        <li><span class="parameter">step</span>
+            <span class="types"><span class="type">number</span></span>
+         how much of the value should be added per update
+        </li>
+        <li><span class="parameter">freq</span>
+            <span class="types"><span class="type">number</span></span>
+         the frequency of the updates in millisecs
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uberScore:CreateAction"></a>
+    <strong>uberScore:CreateAction (options)</strong>
+    </dt>
+    <dd>
+    Add actions that get fired when
+ a certain values gets added or is reached
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">options</span>
+        <p> a table with options for the action</p>
+
+<ul>
+<li><code>value</code>:      (<strong>number</strong>) the value where the action gets triggered</li>
+<li><code>trigger</code>:    (<strong>string</strong>) the kind of trigger (<em>default</em> &ldquo;above&rdquo;)
+match = exactly match the value
+above = exactly match or above the value
+below = exactly match or below the value (for negative score counter)
+add = if an exact value gets added
+addAtLast = if an exact or bigger as value gets added
+sub = if an exact value gets subtracted
+subAtLast = if an exact or bigger as value gets subtracted</li>
+<li><code>pfx</code>:        (<strong>string</strong>) the name of the particle fx in the <strong>pfx folder</strong> (<strong>default</strong> &ldquo;stars&rdquo;)</li>
+<li><code>duration</code>:   (<strong>number</strong>) the duration of the particle effect (<strong>default</strong> 1000)</li>
+<li><code>iteration</code>:  (<strong>number</strong>) the kind of trigger (<em>default</em> 1)</li>
+<li><code>callback</code>:   (<strong>function</strong>) a custum callback function</li>
+</ul>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uberScore:Delete"></a>
+    <strong>uberScore:Delete ()</strong>
+    </dt>
+    <dd>
+    Deletes the score counter
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uberScore:GetWidth"></a>
+    <strong>uberScore:GetWidth ()</strong>
+    </dt>
+    <dd>
+    Get the width of the whole score display
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the width of the score counter
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uberScore:PointsInBuffer"></a>
+    <strong>uberScore:PointsInBuffer ()</strong>
+    </dt>
+    <dd>
+    How many score points are in the buffer
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the number of score points in the score buffer
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uberScore:SetColor"></a>
+    <strong>uberScore:SetColor (r, g, b)</strong>
+    </dt>
+    <dd>
+    Sets the tint color of the bitmap font
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">r</span>
+
+
+        </li>
+        <li><span class="parameter">g</span>
+
+
+        </li>
+        <li><span class="parameter">b</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-05-04 09:55:17 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
