@@ -44,11 +44,11 @@
 
 <h1>Module <code>UberScore</code></h1>
 <p>uberscore.lua</p>
-<p> A Score Display system for Corona SDK</p>
+<p> Animated Score Counter Module for Corona SDK</p>
     <h3>Info:</h3>
     <ul>
         <li><strong>Copyright</strong>: DevilSquid, René Aye &ndash; 2016</li>
-        <li><strong>License</strong>: MIT</li>
+        <li><strong>License</strong>: MIT License</li>
         <li><strong>Author</strong>: René Aye</li>
     </ul>
 
@@ -60,13 +60,13 @@
 	<td class="summary">Constructor function of UberScore module</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#uberScore:Add">uberScore:Add (value, step, freq)</a></td>
+	<td class="name" nowrap><a href="#uberScore:Add">uberScore:Add (value[, step=1[, freq]])</a></td>
 	<td class="summary">Add a value to the score counter</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#uberScore:CreateAction">uberScore:CreateAction (options)</a></td>
 	<td class="summary">Add actions that get fired when
- a certain values gets added or is reached</td>
+ a certain value gets added or is reached</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#uberScore:Delete">uberScore:Delete ()</a></td>
@@ -78,7 +78,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#uberScore:PointsInBuffer">uberScore:PointsInBuffer ()</a></td>
-	<td class="summary">How many score points are in the buffer</td>
+	<td class="summary">Check how many score points are in the buffer and not in the display yet</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#uberScore:SetColor">uberScore:SetColor (r, g, b)</a></td>
@@ -104,7 +104,7 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">options</span>
-        <p> a table with options for the score counter curve</p>
+        <p> a table with options for the score counter</p>
 
 <ul>
 <li><code>x</code>:                  (<strong>number</strong>) the x position of the score counter (<em>default</em> 0)</li>
@@ -119,7 +119,7 @@
 <li><code>animationSpeed</code>:     (<strong>number</strong>) the transition speed of the animation in millisecs (<em>default</em> 250)</li>
 <li><code>transitionIn</code>:       (<strong>transition</strong>) custom easing transitions when a new digit comes in (<em>default</em> easing.linear)</li>
 <li><code>transitionOut</code>:      (<strong>transition</strong>) custom easing transitions when a new digit goes out (<em>default</em> easing.linear)</li>
-<li><code>updateFrequency</code>:    (<strong>number</strong>) the frequency of the score counter updates (<em>default</em> 100)</li>
+<li><code>updateFrequency</code>:    (<strong>number</strong>) the global frequency of the score counter updates (<em>default</em> 100)</li>
 <li><code>instantChange</code>:      (<strong>bool</strong>) if the whole score buffer should be instantly added to the counter on next update (<em>default</em> false)</li>
 </ul>
 
@@ -127,20 +127,25 @@
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        returns an UberScore object
+    </ol>
 
 
 
     <h3>Usage:</h3>
     <ul>
         <pre class="example">
-  <span class="keyword">local</span> UberScore = <span class="global">require</span>(<span class="string">"devilsquid.uberscore.uberscore"</span>)
- 	<span class="keyword">local</span> score = UberScore:new()</pre>
+ <span class="keyword">local</span> UberScore = <span class="global">require</span>(<span class="string">"devilsquid.uberscore.uberscore"</span>)
+ <span class="keyword">local</span> score = UberScore:new()</pre>
     </ul>
 
 </dd>
     <dt>
     <a name = "uberScore:Add"></a>
-    <strong>uberScore:Add (value, step, freq)</strong>
+    <strong>uberScore:Add (value[, step=1[, freq]])</strong>
     </dt>
     <dd>
     Add a value to the score counter
@@ -155,16 +160,39 @@
         <li><span class="parameter">step</span>
             <span class="types"><span class="type">number</span></span>
          how much of the value should be added per update
+         (<em>default</em> 1)
         </li>
         <li><span class="parameter">freq</span>
             <span class="types"><span class="type">number</span></span>
          the frequency of the updates in millisecs
+         (<em>optional</em>)
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        nothing
+    </ol>
 
 
 
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ <span class="comment">-- add 15 pounts to the counter
+</span> score:Add( <span class="number">15</span> )
+
+ <span class="comment">-- add 15 points in three steps which leads to adding 5 points per update cycle
+</span> <span class="comment">-- use this for big numbers that has to be counted fast
+</span> score:Add( <span class="number">15</span>, <span class="number">3</span> )
+
+ <span class="comment">-- add 15 points in one step (default) with an update speed of 25 millisecs
+</span> <span class="comment">-- if you set up an UberScore counter with a global update frequency of 100 millisecs
+</span> <span class="comment">-- you can add these 15 points with a higher speed to the counter
+</span> <span class="comment">-- this is intended to give player feedback (fast score counting = the player achieved something special)
+</span> score:Add( <span class="number">15</span>, <span class="number">1</span>, <span class="number">25</span> )</pre>
+    </ul>
 
 </dd>
     <dt>
@@ -173,7 +201,7 @@
     </dt>
     <dd>
     Add actions that get fired when
- a certain values gets added or is reached
+ a certain value gets added or is reached
 
 
     <h3>Parameters:</h3>
@@ -183,15 +211,20 @@
 
 <ul>
 <li><code>value</code>:      (<strong>number</strong>) the value where the action gets triggered</li>
-<li><code>trigger</code>:    (<strong>string</strong>) the kind of trigger (<em>default</em> &ldquo;above&rdquo;)
-match = exactly match the value
-above = exactly match or above the value
-below = exactly match or below the value (for negative score counter)
-add = if an exact value gets added
-addAtLast = if an exact or bigger as value gets added
-sub = if an exact value gets subtracted
-subAtLast = if an exact or bigger as value gets subtracted</li>
-<li><code>pfx</code>:        (<strong>string</strong>) the name of the particle fx in the <strong>pfx folder</strong> (<strong>default</strong> &ldquo;stars&rdquo;)</li>
+<li><code>trigger</code>:    (<strong>string</strong>) the kind of trigger (<em>default</em> &ldquo;above&rdquo;)<br>
+You can use the following triggers:<br>
+
+<ul>
+<li><strong>match</strong> = exactly match the value<br></li>
+<li><strong>above</strong> = exactly match or above the value<br></li>
+<li><strong>below</strong> = exactly match or below the value (for negative score counter)<br></li>
+<li><strong>add</strong> = if an exact value gets added<br></li>
+<li><strong>addAtLast</strong> = if an exact or bigger as value gets added<br></li>
+<li><strong>sub</strong> = if an exact value gets subtracted<br></li>
+<li><strong>subAtLast</strong> = if an exact or bigger as value gets subtracted<br></li>
+</ul>
+</li>
+<li><code>pfx</code>:        (<strong>string</strong>) the name of the particle fx in the <strong>pfx folder</strong>, you can use &ldquo;stars&rdquo; or &ldquo;hearts&rdquo; (<strong>default</strong> &ldquo;stars&rdquo;)</li>
 <li><code>duration</code>:   (<strong>number</strong>) the duration of the particle effect (<strong>default</strong> 1000)</li>
 <li><code>iteration</code>:  (<strong>number</strong>) the kind of trigger (<em>default</em> 1)</li>
 <li><code>callback</code>:   (<strong>function</strong>) a custum callback function</li>
@@ -201,9 +234,33 @@ subAtLast = if an exact or bigger as value gets subtracted</li>
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        nothing
+    </ol>
 
 
 
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ <span class="comment">-- create a built-in stars particle effect when the score reaches 100 points or above
+</span> score:CreateAction({ value=<span class="number">100</span> })
+
+ <span class="comment">-- create a built-in hearts particle effect when the score reaches exactly 500 points or above
+</span> score1:CreateAction({ value=<span class="number">200</span>, trigger=<span class="string">"match"</span>, duration=<span class="number">500</span>, pfx=<span class="string">"hearts"</span>  })
+
+ <span class="comment">-- create a custom particle effect when more than 74 points gets added to the counter
+</span> <span class="keyword">local</span> <span class="keyword">function</span> EmitParticleFX()
+     <span class="keyword">local</span> pfx = ParticleDesigner:new({ fileName = <span class="string">"my/particle/effect/file.json"</span>, duration=<span class="number">500</span> })
+     pfx.x = score.x
+     pfx.y = score.y
+     <span class="keyword">local</span> width = score:GetWidth()
+     transition.to( pfx, {time=<span class="number">500</span>, x=pfx.x-width})
+ <span class="keyword">end</span>
+ score:CreateAction({ value=<span class="number">75</span>, trigger=<span class="string">"addAtLast"</span>, callback=EmitParticleFX })</pre>
+    </ul>
 
 </dd>
     <dt>
@@ -215,9 +272,19 @@ subAtLast = if an exact or bigger as value gets subtracted</li>
 
 
 
+    <h3>Returns:</h3>
+    <ol>
+
+        nothing
+    </ol>
 
 
 
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ score:Delete()</pre>
+    </ul>
 
 </dd>
     <dt>
@@ -232,11 +299,16 @@ subAtLast = if an exact or bigger as value gets subtracted</li>
     <h3>Returns:</h3>
     <ol>
 
-        the width of the score counter
+        the number value of the width of the score counter
     </ol>
 
 
 
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ <span class="keyword">local</span> scoreWidth = score:GetWidth()</pre>
+    </ul>
 
 </dd>
     <dt>
@@ -244,7 +316,7 @@ subAtLast = if an exact or bigger as value gets subtracted</li>
     <strong>uberScore:PointsInBuffer ()</strong>
     </dt>
     <dd>
-    How many score points are in the buffer
+    Check how many score points are in the buffer and not in the display yet
 
 
 
@@ -256,6 +328,11 @@ subAtLast = if an exact or bigger as value gets subtracted</li>
 
 
 
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ <span class="keyword">local</span> pointsInBuffer = score:PointsInBuffer()</pre>
+    </ul>
 
 </dd>
     <dt>
@@ -282,9 +359,20 @@ subAtLast = if an exact or bigger as value gets subtracted</li>
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        nothing
+    </ol>
 
 
 
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+ <span class="comment">-- tint the bitmap font in red
+</span> score:SetColor( <span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span> )</pre>
+    </ul>
 
 </dd>
 </dl>
@@ -294,7 +382,7 @@ subAtLast = if an exact or bigger as value gets subtracted</li>
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-05-04 09:55:17 </i>
+<i style="float:right;">Last updated 2016-05-24 08:42:55 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
